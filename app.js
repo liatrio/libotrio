@@ -8,6 +8,13 @@ const app = new App({
   socketMode: true
 });
 
+var normalizedPath = require("path").join(__dirname, "features");
+require("fs")
+  .readdirSync(normalizedPath)
+  .forEach(function (file) {
+    require("./features/" + file)(app);
+  });
+
 (async () => {
   // Start your app
   await app.start(process.env.PORT || 3000);

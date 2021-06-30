@@ -1,0 +1,10 @@
+version: "3"
+services:
+    libotrio:
+        build: .
+        ports:
+            - "3000:3000"
+        environment: 
+            - SIGNING_SECRET
+            - BOT_USER_OAUTH_ACCESS_TOKEN 
+            - SLACK_APP_TOKEN
