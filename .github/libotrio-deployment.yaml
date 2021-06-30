@@ -1,7 +1,6 @@
 name: Libotrio Deployment
 
-on: 
-  push:
+on: push
     # branches:
     # # - main
 
