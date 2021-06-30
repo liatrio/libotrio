@@ -4,7 +4,8 @@ on: push
     # branches:
     # # - main
 
-#env:
+env:
+  IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/libotrio
   # NODE_VERSION: '12.16.3'
   # TERRAGRUNT_VERSION: '0.28.14'
 
