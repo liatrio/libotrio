@@ -1,0 +1,22 @@
+{
+  "name": "libotrio2.0",
+  "version": "1.0.0",
+  "description": "Liatrio's new and improved Libotrio",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liatrio/libotrio2.0.git"
+  },
+  "author": "Connor Paul and Calvin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/liatrio/libotrio2.0/issues"
+  },
+  "homepage": "https://github.com/liatrio/libotrio2.0#readme",
+  "dependencies": {
+    "@slack/bolt": "^3.4.0"
+  }
+}
