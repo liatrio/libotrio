@@ -3,7 +3,7 @@ name: Libotrio Deployment
 on: 
   push:
     branches:
-    - main
+    # - main
 
 env:
   # NODE_VERSION: '12.16.3'
