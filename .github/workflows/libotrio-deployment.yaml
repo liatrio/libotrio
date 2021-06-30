@@ -9,14 +9,36 @@ on: push
   # TERRAGRUNT_VERSION: '0.28.14'
 
 jobs:
-  libotrio-deployment-test-prod:
-    name: Libotrio-Deployment-Prod
+    build:
+      name: Tag image
+      runs-on:  
+      - self-hosted
+      - liatrio-runners-prod
+      steps:
+        - uses: actions/checkout@v2
 
-    runs-on: 
-    - self-hosted
-    - liatrio-runners-prod
+        - name: Generate tag
+          id: tag
+          run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
 
-    steps:
-      # Checks out a copy of your repository on the ubuntu-latest machine
-      - name: Checkout code
-        uses: actions/checkout@v2
+        - name: Build image
+          run: docker build . --file Dockerfile --tag $IMAGE_NAME:${{ steps.tag.outputs.tag }} --label "runnumber=${GITHUB_RUN_ID}"
+
+        - name: Log into registry
+          run: echo "${{ secrets.LIBOTRIO_GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+        - name: Push image
+          run: docker push $IMAGE_NAME:${{ steps.tag.outputs.tag }}
+      outputs:
+        docker_tag: ${{ steps.tag.outputs.tag }}
+    libotrio-deployment-test-prod:
+      name: Libotrio-Deployment-Prod
+
+      runs-on: 
+      - self-hosted
+      - liatrio-runners-prod
+
+      steps:
+        # Checks out a copy of your repository on the ubuntu-latest machine
+        - name: Checkout code
+          uses: actions/checkout@v2
