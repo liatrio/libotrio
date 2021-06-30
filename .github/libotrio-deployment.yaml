@@ -1,0 +1,23 @@
+name: Libotrio Deployment
+
+on: 
+  push:
+    branches:
+    - main
+
+env:
+  # NODE_VERSION: '12.16.3'
+  # TERRAGRUNT_VERSION: '0.28.14'
+
+jobs:
+  libotrio-deployment-test-prod:
+    name: Libotrio-Deployment-Prod
+
+    runs-on: 
+    - self-hosted
+    - rode-runners-prod
+
+    steps:
+      # Checks out a copy of your repository on the ubuntu-latest machine
+      - name: Checkout code
+        uses: actions/checkout@v2
