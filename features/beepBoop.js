@@ -1,25 +1,33 @@
 const { directMention } = require("@slack/bolt");
-// const { directMessage, anyOf } = require("../middleware");
+const { directMessage, anyOf } = require("../middleware");
+
+const restaurants = [
+  "Aca Taco",
+  "Burgers & Brews",
+  "Broadway Heights"
+]
 
 module.exports = function (app) {
     app.message(
-      "beep",
-    //   anyOf(directMention(), directMessage()),
+      "lunch",
+      anyOf(directMention(), directMessage()),
       beepBoop
     );
 };
 
 async function beepBoop({ message, client }) {
-    
+
+
     const response = [
-        `BOOP`
-      ].join("\n");
-    
+      restaurants
+    ].join("\n");
+  
     await client.chat.postEphemeral({
         channel: message.channel,
         user: message.user,
         text: response,
     });
     
-
+  
+    
 }
