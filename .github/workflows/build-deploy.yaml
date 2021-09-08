@@ -23,14 +23,14 @@ jobs:
       
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
-        if: github.ref == 'ref/head/main'
+        if: github.ref == 'refs/head/main'
         with:
           registry: ghcr.io
           username: ${{ secrets.CR_USER }}
           password: ${{ secrets.CR_PAT }}
 
       - name: Push image
-        if: github.ref == 'ref/head/main'
+        if: github.ref == 'refs/head/main'
         run: docker push $IMAGE_NAME:${{ steps.tag.outputs.tag }}
 
     outputs:
@@ -39,7 +39,7 @@ jobs:
   deployment-prod:
     name: Deploy to Prod
     needs: build
-    if: github.ref == 'ref/head/main'
+    if: github.ref == 'refs/head/main'
     runs-on:
       - self-hosted
       - liatrio-runners-prod
