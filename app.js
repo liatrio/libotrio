@@ -1,5 +1,5 @@
-const { App } = require('@slack/bolt');
-const express = require('express');
+const { App } = require("@slack/bolt");
+const express = require("express");
 
 const webserver = express();
 
@@ -37,14 +37,14 @@ webserver.get("/healthz", async (req, res) => {
     }
   }
   res.send(status_checks);
-})
+});
 
 // Initializes your app with your bot token and signing secret
 const app = new App({
   token: process.env.SLACK_BOT_USER_OAUTH_TOKEN,
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   appToken: process.env.SLACK_APP_TOKEN,
-  socketMode: true
+  socketMode: true,
 });
 
 var normalizedPath = require("path").join(__dirname, "features");
@@ -59,5 +59,5 @@ require("fs")
   await app.start();
   webserver.listen(process.env.PORT || 3000);
 
-  console.log('⚡️ Bolt app is running!');
+  console.log("⚡️ Bolt app is running!");
 })();
