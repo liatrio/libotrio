@@ -4,7 +4,12 @@
   "description": "Liatrio's new and improved Libotrio",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prettier": "prettier --check .",
+    "eslint": "eslint '*.js' 'features/**'",
+    "helm-lint": "helm lint chart",
+    "lint": "npm run prettier && npm run eslint  && npm run helm-lint ",
+    "lint-fix": "prettier --write . && eslint '*.js' 'features/**' --fix"
   },
   "repository": {
     "type": "git",
@@ -18,5 +23,10 @@
   "homepage": "https://github.com/liatrio/libotrio#readme",
   "dependencies": {
     "@slack/bolt": "^3.4.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "prettier": "2.4.1"
   }
 }

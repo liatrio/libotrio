@@ -1,0 +1,25 @@
+name: Check Code Formatting
+
+on: push
+
+jobs:
+  build:
+    name: Check Code Formatting
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+
+      - name: Prettier
+        run: npm run prettier
+
+      - name: esLint
+        run: npm run eslint
+
+      - name: Helm Lint
+        run: npm run helm-lint
