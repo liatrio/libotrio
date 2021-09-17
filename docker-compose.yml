@@ -4,7 +4,6 @@ services:
         build: .
         ports:
             - "3000:3000"
-        environment: 
-            - SLACK_SIGNING_SECRET
+        environment:
             - SLACK_BOT_USER_OAUTH_TOKEN 
             - SLACK_APP_TOKEN
