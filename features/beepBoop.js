@@ -1,4 +1,4 @@
-// const { diretMention } = require("@slack/bolt");
+// const { directMention } = require("@slack/bolt");
 // const { directMessage, anyOf } = require("../middleware");
 
 module.exports = function (app) {
