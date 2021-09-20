@@ -49,10 +49,10 @@ webserver.get("/healthz", async (req, res) => {
 
   // Check Database Connection
   try {
-    await con.ping()
-    status_checks.database='OK';
+    await con.ping();
+    status_checks.database = "OK";
   } catch (err) {
-    status_checks.databse = "DATABASE ERROR: " + err
+    status_checks.databse = "DATABASE ERROR: " + err;
   }
 
   for (const i in status_checks) {
