@@ -47,6 +47,14 @@ webserver.get("/healthz", async (req, res) => {
     ? "Connection Failed"
     : "OK";
 
+  // Check Database Connection
+  try {
+    await con.ping()
+    status_checks.database='OK';
+  } catch (err) {
+    status_checks.databse = "DATABASE ERROR: " + err
+  }
+
   for (const i in status_checks) {
     if (status_checks[i] !== "OK") {
       res.status(500).send(status_checks);
