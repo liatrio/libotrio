@@ -20,8 +20,9 @@ export MYSQL_ROOT_PASSWORD=""
 export MYSQL_DATABASE=""
 export MYSQL_USER=""
 export MYSQL_PASSWORD=""
-export MYSQL_HOSTNAME=""
 export SLACK_SIGNING_SECRET=""
 export SLACK_BOT_USER_OAUTH_TOKEN=""
 export SLACK_APP_TOKEN=""
 ```
+
+Note: MYSQL_HOSTNAME should be the same as the database service name in the `docker-compose.yml` file. In this case it is just "database".
