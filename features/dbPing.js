@@ -18,7 +18,6 @@ async function dbPing({ message, client }) {
   });
 
   // First we will make the table if there isn't one
-  var response = "";
   con.query(
     {
       sql: "CREATE TABLE IF NOT EXISTS profiles(name varchar(20) PRIMARY KEY, pings INT)",
@@ -42,22 +41,15 @@ async function dbPing({ message, client }) {
   );
 
   // Finally we will grab the ping value
-  con.query(
-    {
-      sql: "SELECT pings FROM profiles WHERE name = ?",
-      timeout: 30000, // 30s
-      values: [message.user],
-    },
-    function (err, results) {
-      if (err) throw err; // if there's an error then throw
-      // otherwise, do this...
-      console.log(results[0].pings);
-      response = "total pings from you: " + results[0].pings;
-    }
-  );
+  var response = "";
+  const [rows] = await con.promise().query({
+    sql: "SELECT pings FROM profiles WHERE name = ?",
+    timeout: 30000, // 30s
+    values: [message.user],
+  });
+  response = "total pings from you: " + rows[0].pings;
 
   const returnResponse = response + "\n";
-
   await client.chat.postEphemeral({
     channel: message.channel,
     user: message.user,
