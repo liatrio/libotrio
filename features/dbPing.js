@@ -32,7 +32,7 @@ async function dbPing({ message, client }) {
   // Then we will INSERT/UPDATE the current ping value
   con.query(
     {
-      sql: "INSERT INTO profiles(name, pings) VALUES(?, 0) ON DUPLICATE KEY UPDATE pings = pings + 1",
+      sql: "INSERT INTO profiles(name, pings) VALUES(?, 1) ON DUPLICATE KEY UPDATE pings = pings + 1",
       timeout: 30000, // 30s
       values: [message.user],
     },
@@ -55,21 +55,6 @@ async function dbPing({ message, client }) {
       response = "total pings from you: " + results[0].pings;
     }
   );
-
-  // con
-  // .promise()
-  // .query({
-  //   sql: "SELECT pings FROM profiles WHERE name = ?",
-  //   timeout: 30000, // 30s
-  //   values: [message.user],
-  // })
-  // .then(([rows]) => {
-  //   console.log(rows[0].pings);
-  //   pingVar = rows[0].pings;
-  //   response = "TOTAL PINGS FROM YOU = " + pingVar;
-  // })
-  // .catch(console.log)
-  // .then(() => con.end());
 
   const returnResponse = response + "\n";
 
