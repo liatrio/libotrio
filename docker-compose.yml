@@ -8,10 +8,10 @@ services:
       - SLACK_SIGNING_SECRET
       - SLACK_BOT_USER_OAUTH_TOKEN
       - SLACK_APP_TOKEN
-      - MYSQL_HOSTNAME
       - MYSQL_USER
       - MYSQL_PASSWORD
       - MYSQL_DATABASE
+      - MYSQL_HOSTNAME=database
     depends_on:
       database:
         condition: service_healthy
