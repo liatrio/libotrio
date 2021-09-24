@@ -2,7 +2,7 @@ FROM node:16-alpine3.11 as TEST
 COPY package.json package-lock.json ./
 RUN npm install
 COPY . .
-RUN npm run test
+#RUN npm run test
 
 FROM node:16-alpine3.11 as BUILD
 WORKDIR /app
