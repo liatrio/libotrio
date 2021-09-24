@@ -26,3 +26,4 @@ export SLACK_APP_TOKEN=""
 ```
 
 Note: MYSQL_HOSTNAME should be the same as the database service name in the `docker-compose.yml` file. In this case it is just "database".
+This is a change
