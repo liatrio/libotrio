@@ -1,5 +1,6 @@
 // const { directMention } = require("@slack/bolt");
 // const { directMessage, anyOf } = require("../middleware");
+const boopNo = require("../lib/beepBoop_lib");
 
 module.exports = function (app) {
   app.message(
@@ -10,7 +11,7 @@ module.exports = function (app) {
 };
 
 async function beepBoop({ message, client }) {
-  const response = [`BOOP`].join("\n");
+  const response = boopNo.respond();
 
   await client.chat.postEphemeral({
     channel: message.channel,
