@@ -69,7 +69,7 @@ require("fs")
   const con = await databaseOps.connectToDB();
 
   // Initialize the database
-  databaseOps.setupDB(con);
+  await databaseOps.setupDB(con);
   console.log("Connected!");
 
   // Start your app
