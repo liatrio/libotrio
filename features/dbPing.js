@@ -6,7 +6,7 @@ module.exports = function (app) {
 };
 
 async function dbPing({ message, client }) {
-  var con = databaseOps.connectToDB();
+  var con = await databaseOps.connectToDB();
   const pings = await databaseOps.getPings(con, message.user);
 
   await client.chat.postEphemeral({

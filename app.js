@@ -4,10 +4,6 @@ const databaseOps = require("./lib/databaseOps");
 
 const webserver = express();
 
-var con = databaseOps.connectToDB();
-databaseOps.setupDB(con);
-console.log("Connected!");
-
 webserver.get("/healthz", async (req, res) => {
   const status_checks = {};
 
@@ -68,6 +64,13 @@ require("fs")
   });
 
 (async () => {
+  // Set up async connection
+  const con = await databaseOps.connectToDB();
+
+  // Initialize the database
+  databaseOps.setupDB(con);
+  console.log("Connected!");
+
   // Start your app
   await app.start();
   webserver.listen(process.env.PORT || 3000);
