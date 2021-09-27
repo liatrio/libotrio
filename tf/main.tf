@@ -1,53 +1,43 @@
+locals {
+  name   = "libotrio"
+  region = "us-east-1"
+  tags   = yamldecode(file("tags.yaml"))
+}
+
+terraform {
+  backend "s3" {}
+}
+
 provider "aws" {
   region = "us-east-1"
 }
 
+provider "vault" {
+  address = var.vault_address
 
-data "aws_vpc" "lead_vpc" {
+  auth_login {
+    path   = "auth/aws/login"
+    method = "aws"
+
+    parameters = {
+      role = var.vault_role
+    }
+  }
+}
+
+data "aws_vpc" "vpc" {
   tags = {
     Name = var.vpc_name
   }
 }
 
+data "aws_caller_identity" "current" {}
 
-resource "aws_security_group" "gratibot" {
-  name_prefix = "gratibot"
-  vpc_id      = data.aws_vpc.lead_vpc.id
+data "aws_subnet_ids" "database_subnets" {
+  vpc_id = data.aws_vpc.vpc.id
 
-  ingress {
-    from_port = 22
-    to_port   = 22
-    protocol  = "tcp"
-
-    cidr_blocks = [
-      data.aws_vpc.lead_vpc.cidr_block,
-      #"10.1.32.0/20", # internal VPN
-    ]
+  filter {
+    name   = "tag:subnet-kind"
+    values = ["database"]
   }
-  ingress {
-    from_port = 443
-    to_port   = 443
-    protocol  = "tcp"
-  }
-}
-
-
-
-resource "aws_docdb_cluster" "docdb" {
-  cluster_identifier      = "my-docdb-cluster"
-  engine                  = "docdb"
-  master_username         = "foo"
-  master_password         = "mustbeeightchars"
-  skip_final_snapshot     = "true"
-
-  vpc_security_group_ids  = [
-      aws_security_group.gratibot.id
-  ]
-}
-
-resource "aws_docdb_cluster_instance" "cluster_instances" {
-  count              = 1
-  identifier         = "docdb-cluster-demo-${count.index}"
-  cluster_identifier = aws_docdb_cluster.docdb.id
-  instance_class     = "db.t3.medium"
 }
