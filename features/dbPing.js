@@ -1,17 +1,16 @@
-const databaseOps = require("../lib/databaseOps");
-const sendMessage = require("../lib/sendMessage");
+const pings = require("../repositories/pings");
+const sendMessage = require("../services/sendMessage");
 
 module.exports = function (app) {
   app.message("dbping", dbPing);
 };
 
 async function dbPing({ message, client }) {
-  var con = await databaseOps.connectToDB();
-  const pings = await databaseOps.getPings(con, message.user);
+  const ping = await pings.getPings(message.user);
 
   await client.chat.postEphemeral({
     channel: message.channel,
     user: message.user,
-    text: sendMessage.reportPings(pings),
+    text: sendMessage.reportPings(ping),
   });
 }

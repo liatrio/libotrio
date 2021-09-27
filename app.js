@@ -1,6 +1,6 @@
 const { App } = require("@slack/bolt");
 const express = require("express");
-const databaseOps = require("./lib/databaseOps");
+const databaseOps = require("./repositories/databaseOps");
 
 const webserver = express();
 
@@ -65,12 +65,10 @@ require("fs")
   });
 
 (async () => {
-  // Set up async connection
-  const con = await databaseOps.connectToDB();
-
   // Initialize the database
-  await databaseOps.setupDB(con);
+  databaseOps.setupDB();
   console.log("Connected!");
+
 
   // Start your app
   await app.start();
