@@ -33,6 +33,7 @@ webserver.get("/healthz", async (req, res) => {
 
   // Check Database Connection
   try {
+    const con = await databaseOps.connectToDB();
     await con.ping();
     status_checks.database = "OK";
   } catch (err) {
