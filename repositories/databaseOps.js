@@ -6,10 +6,11 @@ const connectToDB = () => {
     password: process.env.MYSQL_PASSWORD,
     database: process.env.MYSQL_DATABASE,
   });
-}
+};
 
-module.exports = { 
-  connectToDB: () => { // This returns a promise so make sure to `await` it
+module.exports = {
+  connectToDB: () => {
+    // This returns a promise so make sure to `await` it
     return mysql.createConnection({
       host: process.env.MYSQL_HOSTNAME,
       user: process.env.MYSQL_USER,

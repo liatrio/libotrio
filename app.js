@@ -69,7 +69,6 @@ require("fs")
   databaseOps.setupDB();
   console.log("Connected!");
 
-
   // Start your app
   await app.start();
   webserver.listen(process.env.PORT || 3000);
