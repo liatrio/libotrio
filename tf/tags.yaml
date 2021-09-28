@@ -1,0 +1,3 @@
+client: "Liatrio"
+managed_by: "terraform"
+project: "https://github.com/liatrio/libotrio"

@@ -47,6 +47,21 @@ spec:
                 secretKeyRef:
                   name: libotrio
                   key: SLACK_BOT_USER_OAUTH_TOKEN
+            - name: MYSQL_HOSTNAME
+              valueFrom:
+                secretKeyRef:
+                  name: libotrio
+                  key: DB_HOST
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: libotrio
+                  key: DB_USERNAME
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: libotrio
+                  key: DB_PASSWORD
           ports:
             - name: http
               containerPort: 3000
