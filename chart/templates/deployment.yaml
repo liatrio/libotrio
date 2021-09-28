@@ -62,6 +62,8 @@ spec:
                 secretKeyRef:
                   name: libotrio
                   key: DB_PASSWORD
+            - name: MYSQL_DATABASE
+              value: libotrio
           ports:
             - name: http
               containerPort: 3000
