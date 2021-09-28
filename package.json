@@ -4,7 +4,7 @@
   "description": "Liatrio's new and improved Libotrio",
   "main": "index.js",
   "scripts": {
-    "test": "nyc mocha",
+    "test": "nyc mocha test/**/*.js",
     "prettier": "prettier --check .",
     "eslint": "eslint '*.js' 'features/**'",
     "helm-lint": "helm lint chart",
