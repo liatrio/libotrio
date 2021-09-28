@@ -1,24 +1,8 @@
 const { App } = require("@slack/bolt");
 const express = require("express");
+const databaseOps = require("./repositories/databaseOps");
 
 const webserver = express();
-var mysql = require("mysql2");
-
-var con = mysql.createConnection({
-  host: process.env.MYSQL_HOSTNAME,
-  user: process.env.MYSQL_USER,
-  password: process.env.MYSQL_PASSWORD,
-  database: process.env.MYSQL_DATABASE,
-});
-
-con.connect(function (err) {
-  if (err) throw err;
-  console.log("Connected!");
-  // con.query('SHOW DATABASES LIKE test', function (err, result) {
-  //   if (err) throw err;
-  //   console.log("Result: " + result);
-  // });
-});
 
 webserver.get("/healthz", async (req, res) => {
   const status_checks = {};
@@ -49,6 +33,7 @@ webserver.get("/healthz", async (req, res) => {
 
   // Check Database Connection
   try {
+    const con = await databaseOps.connectToDB();
     await con.ping();
     status_checks.database = "OK";
   } catch (err) {
@@ -80,6 +65,10 @@ require("fs")
   });
 
 (async () => {
+  // Initialize the database
+  databaseOps.setupDB();
+  console.log("Connected!");
+
   // Start your app
   await app.start();
   webserver.listen(process.env.PORT || 3000);
