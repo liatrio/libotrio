@@ -1,8 +1,5 @@
 const mysql = require("mysql2");
 
-// grab connection from the pool
-// create pool at startup
-
 let pool;
 
 module.exports = {
@@ -16,8 +13,7 @@ module.exports = {
       connectionLimit: 5,
       queueLimit: 0,
     });
-    // console.log(pool)
-    console.log("Pool created");
+    console.log("Pool created!");
   },
 
   grabConnection: () => {
