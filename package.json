@@ -1,6 +1,6 @@
 {
   "name": "libotrio",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Liatrio's new and improved Libotrio",
   "main": "index.js",
   "scripts": {
