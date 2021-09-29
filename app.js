@@ -1,7 +1,7 @@
 const { App } = require("@slack/bolt");
 const express = require("express");
 const databaseOps = require("./repositories/databaseOps");
-const pool = require("./repositories/pool")
+const pool = require("./repositories/pool");
 
 const webserver = express();
 
@@ -67,6 +67,7 @@ require("fs")
 
 (async () => {
   // Initialize the database
+  pool.setupPool();
   await databaseOps.setupDB();
   console.log("Connected!");
 

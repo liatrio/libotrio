@@ -1,4 +1,4 @@
-const mysql = require("mysql2/promise");
+const mysql = require("mysql2");
 
 // grab connection from the pool
 // create pool at startup
@@ -16,12 +16,12 @@ module.exports = {
       connectionLimit: 5,
       queueLimit: 0,
     });
+    // console.log(pool)
+    console.log("Pool created");
   },
 
   grabConnection: () => {
-    if(pool)
-      return pool.promise()
-    else
-      throw "POOL UNDEFINED"
+    if (pool) return pool.promise();
+    else throw "POOL UNDEFINED";
   },
 };

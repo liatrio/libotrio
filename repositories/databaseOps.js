@@ -1,5 +1,5 @@
 const mysql = require("mysql2/promise");
-const pool  = require("./pool");
+const pool = require("./pool");
 
 // const connectToDB = () => {
 //   return mysql.createConnection({
