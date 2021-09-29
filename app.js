@@ -1,6 +1,7 @@
 const { App } = require("@slack/bolt");
 const express = require("express");
 const databaseOps = require("./repositories/databaseOps");
+const pool = require("./repositories/pool")
 
 const webserver = express();
 
@@ -33,8 +34,8 @@ webserver.get("/healthz", async (req, res) => {
 
   // Check Database Connection
   try {
-    const con = await databaseOps.connectToDB();
-    await con.ping();
+    const promisePool = pool.grabConnection();
+    await promisePool.ping();
     status_checks.database = "OK";
   } catch (err) {
     status_checks.databse = "DATABASE ERROR: " + err;
@@ -66,7 +67,7 @@ require("fs")
 
 (async () => {
   // Initialize the database
-  databaseOps.setupDB();
+  await databaseOps.setupDB();
   console.log("Connected!");
 
   // Start your app

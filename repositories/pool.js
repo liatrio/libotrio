@@ -3,9 +3,11 @@ const mysql = require("mysql2/promise");
 // grab connection from the pool
 // create pool at startup
 
+let pool;
+
 module.exports = {
   setupPool: () => {
-    const pool = mysql.createPool({
+    pool = mysql.createPool({
       host: process.env.MYSQL_HOSTNAME,
       user: process.env.MYSQL_USER,
       password: process.env.MYSQL_PASSWORD,
@@ -16,5 +18,10 @@ module.exports = {
     });
   },
 
-  getConnection: () => {},
+  grabConnection: () => {
+    if(pool)
+      return pool.promise()
+    else
+      throw "POOL UNDEFINED"
+  },
 };
