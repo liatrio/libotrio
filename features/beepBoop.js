@@ -1,6 +1,6 @@
 // const { directMention } = require("@slack/bolt");
 // const { directMessage, anyOf } = require("../middleware");
-const boopNo = require("../lib/beepBoop_lib");
+const boopNo = require("../services/beepBoopServ");
 
 module.exports = function (app) {
   app.message(
