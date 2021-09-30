@@ -11,6 +11,8 @@ services:
       - MYSQL_PASSWORD
       - MYSQL_DATABASE
       - MYSQL_HOSTNAME=database
+    healthcheck:
+      test: ["CMD", "node", "health-check.js"]
     depends_on:
       database:
         condition: service_healthy
