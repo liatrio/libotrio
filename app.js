@@ -35,8 +35,11 @@ webserver.get("/healthz", async (req, res) => {
   // Check Database Connection
   try {
     const promisePool = pool.grabConnection();
-    await promisePool.ping();
-    status_checks.database = "OK";
+    if (promisePool) {
+      status_checks.database = "OK";
+    } else {
+      throw "pool didn't return a promise!";
+    }
   } catch (err) {
     status_checks.databse = "DATABASE ERROR: " + err;
   }
