@@ -41,7 +41,7 @@ webserver.get("/healthz", async (req, res) => {
       throw "pool didn't return a promise!";
     }
   } catch (err) {
-    status_checks.databse = "DATABASE ERROR: " + err;
+    status_checks.database = "DATABASE ERROR: " + err;
   }
 
   for (const i in status_checks) {
