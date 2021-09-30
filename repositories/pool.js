@@ -1,4 +1,4 @@
-const mysql = require("mysql2");
+const mysql = require("mysql2/promise");
 
 let pool;
 
@@ -16,8 +16,8 @@ module.exports = {
     console.log("Pool created!");
   },
 
-  grabConnection: () => {
-    if (pool) return pool.promise();
+  getPool: () => {
+    if (pool) return pool;
     else throw "POOL UNDEFINED";
   },
 };
