@@ -5,6 +5,8 @@ const pool = require("./repositories/pool");
 
 const webserver = express();
 
+let con = databaseOps.connectToDB();
+
 webserver.get("/healthz", async (req, res) => {
   const status_checks = {};
 
@@ -34,11 +36,8 @@ webserver.get("/healthz", async (req, res) => {
 
   // Check Database Connection
   try {
-    const promisePool = pool.grabConnection();
-    let returnVal = await promisePool.query(
-      "SHOW DATABASES LIKE '" + process.env.MYSQL_DATABASE + "'"
-    );
-    if (returnVal) status_checks.database = "OK";
+    con.ping();
+    status_checks.database = "OK";
   } catch (err) {
     status_checks.database = "DATABASE ERROR: " + err;
   }
