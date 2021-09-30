@@ -10,19 +10,26 @@ describe("repositories/pings", () => {
   let returnValue;
   let queryStub;
 
-  beforeEach( () => {
+  beforeEach(() => {
     chance = new Chance();
     returnValue = chance.integer();
     sandBox = sinon.createSandbox();
-    queryStub = sandBox.stub().onSecondCall().resolves([[{
-        pings: returnValue
-    }]]);
+    queryStub = sandBox
+      .stub()
+      .onSecondCall()
+      .resolves([
+        [
+          {
+            pings: returnValue,
+          },
+        ],
+      ]);
     sandBox.stub(pool, "grabConnection").returns({
-        query: queryStub
+      query: queryStub,
     });
   });
 
-  afterEach( () => {
+  afterEach(() => {
     sandBox.restore();
   });
 
@@ -40,19 +47,18 @@ describe("repositories/pings", () => {
         sql: "INSERT INTO profiles(name, pings) VALUES(?, 1) ON DUPLICATE KEY UPDATE pings = pings + 1",
         timeout: 30000, // 30s
         values: [aUser],
-      })
+      });
     });
 
     it("should retreive the ping value for the user in the database", async () => {
-        let aUser = chance.word();
-        const pings = await getPings(aUser);
-        expect(queryStub).to.have.callCount(2);
-        expect(queryStub).to.have.been.calledWith({
-            sql: "SELECT pings FROM profiles WHERE name = ?",
-            timeout: 30000, // 30s
-            values: [aUser],
-          })
+      let aUser = chance.word();
+      const pings = await getPings(aUser);
+      expect(queryStub).to.have.callCount(2);
+      expect(queryStub).to.have.been.calledWith({
+        sql: "SELECT pings FROM profiles WHERE name = ?",
+        timeout: 30000, // 30s
+        values: [aUser],
+      });
     });
-
   });
 });
