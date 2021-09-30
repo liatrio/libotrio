@@ -35,11 +35,10 @@ webserver.get("/healthz", async (req, res) => {
   // Check Database Connection
   try {
     const promisePool = pool.grabConnection();
-    if (promisePool) {
-      status_checks.database = "OK";
-    } else {
-      throw "pool didn't return a promise!";
-    }
+    let returnVal = await promisePool.query(
+      "SHOW DATABASES LIKE '" + process.env.MYSQL_DATABASE + "'"
+    );
+    if (returnVal) status_checks.database = "OK";
   } catch (err) {
     status_checks.database = "DATABASE ERROR: " + err;
   }
