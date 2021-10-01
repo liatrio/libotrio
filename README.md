@@ -1,5 +1,13 @@
 # libotrio
 
+## Feature list
+
+Below are the current features of libotrio:
+* beep - boop 
+    * When a user messages "beep" in a channel that libotrio is a part of, libotrio responds with "BOOP: #X since last restart" where X is the total number of boops since the last restart of the bot.
+* dbping
+    * When a user messages "dbping" in a channel that libotrio is a part of, libotrio responds with "total pings from you: X" where X is the total number of pings your user has done to the database.
+
 ## AWS RDS
 
 The `tf` folder contains terraform for provisioning an RDS instance for the bot to use. It use Vault to setup a password for the database.
@@ -30,10 +38,9 @@ In the course of adding features to Libotrio, you will need a local version of t
 
 ```
 export MYSQL_ROOT_PASSWORD=""
-export MYSQL_DATABASE="database"
+export MYSQL_DATABASE=database
 export MYSQL_USER=""
 export MYSQL_PASSWORD=""
-export SLACK_SIGNING_SECRET=""
 export SLACK_BOT_USER_OAUTH_TOKEN=""
 export SLACK_APP_TOKEN=""
 ```
