@@ -3,10 +3,11 @@
 ## Feature list
 
 Below are the current features of libotrio:
-* beep - boop 
-    * When a user messages "beep" in a channel that libotrio is a part of, libotrio responds with "BOOP: #X since last restart" where X is the total number of boops since the last restart of the bot.
-* dbping
-    * When a user messages "dbping" in a channel that libotrio is a part of, libotrio responds with "total pings from you: X" where X is the total number of pings your user has done to the database.
+
+- beep - boop
+  - When a user messages "beep" in a channel that libotrio is a part of, libotrio responds with "BOOP: #X since last restart" where X is the total number of boops since the last restart of the bot.
+- dbping
+  - When a user messages "dbping" in a channel that libotrio is a part of, libotrio responds with "total pings from you: X" where X is the total number of pings your user has done to the database.
 
 ## AWS RDS
 
