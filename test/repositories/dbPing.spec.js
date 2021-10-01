@@ -2,7 +2,7 @@ const { expect } = require("chai");
 const Chance = require("chance");
 const sinon = require("sinon");
 const { getPings } = require("../../repositories/pings");
-const pool = require("../../repositories/pool");
+const databaseOps = require("../../repositories/databaseOps");
 
 describe("repositories/pings", () => {
   let chance;
@@ -24,8 +24,13 @@ describe("repositories/pings", () => {
           },
         ],
       ]);
-    sandBox.stub(pool, "grabConnection").returns({
-      query: queryStub,
+    sandBox.stub(databaseOps, "getPool").returns({
+      getConnection: () => {
+        return {
+          query: queryStub,
+          release: sandBox.stub().resolves(),
+        };
+      },
     });
   });
 
