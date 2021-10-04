@@ -10,7 +10,6 @@ module.exports = function (app) {
 
 async function vaccineData({ message, client }) {
   //Cut out State Abbriviation into array
-  stateAbbriv = message.text;
   const stateAbv = message.text.split(" ", 2);
 
   //Use input state to retrieve data
