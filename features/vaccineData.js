@@ -10,7 +10,7 @@ module.exports = function (app) {
 
 async function vaccineData({ message, client }) {
   //Place state abbriviation into own variable
-  const [, stateAbv] = message.text.split(" ");
+  const stateAbv = message.text.slice(-2);
 
   //Use input state to retrieve data
   const stateVaccineData = await vaccine.getUsDataByState(stateAbv);
