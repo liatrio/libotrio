@@ -1,19 +1,16 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: Github-Actions-Metrics-testing
+  name: Libotrio
   annotations:
-    github.com/project-slug: liatrio/github-actions-metrics
-  links: 
-    - url: https://grafana.internal.services.liatr.io/d/D-SFHsjnk/github-actions-usage?orgId=1
-      title: Grafana Dashbord
-      icon: dashboard
+    github.com/project-slug: liatrio/libotrio
   tags:
     - flywheel
     - hellodevops
     - panthers
     - javascript
     - docker
+    - bot
   description: |
     This project is a Slack bot that was created by Grant Esparza and Alice Jones. The project
     was then updated by the Probable Panthers, Austin White, Christian Hodges, and Micah Perez.
