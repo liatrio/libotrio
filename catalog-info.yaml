@@ -4,6 +4,7 @@ metadata:
   name: Libotrio
   annotations:
     github.com/project-slug: liatrio/libotrio
+    backstage.io/techdocs-ref: dir:.
   tags:
     - flywheel
     - hellodevops
