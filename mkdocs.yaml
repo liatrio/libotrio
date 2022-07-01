@@ -1,8 +1,7 @@
-site_name: 'libotrio'
+site_name: "libotrio"
 
 plugins:
   - techdocs-core
 
 nav:
   - Introduction: README.md
-
