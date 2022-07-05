@@ -1,0 +1,22 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: Libotrio
+  annotations:
+    github.com/project-slug: liatrio/libotrio
+    backstage.io/techdocs-ref: dir:.
+  tags:
+    - flywheel
+    - hellodevops
+    - panthers
+    - javascript
+    - docker
+    - bot
+  description: |
+    This project is a Slack bot that was created by Grant Esparza and Alice Jones. The project
+    was then updated by the Probable Panthers, Austin White, Christian Hodges, and Micah Perez.
+    The Panthers updated the project by adding the dbping and Vaccine features.
+spec:
+  type: service
+  lifecycle: experimental
+  owner: probable-panthers
