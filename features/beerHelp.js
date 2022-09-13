@@ -1,11 +1,9 @@
 const boopNo = require("../services/beepBoopServ");
  
 module.exports = function (app) {
-    app.message(
-      "beerhelp",
-      //   anyOf(directMention(), directMessage()),
-      beepBoop
-    );
+	app.message(':wave:', async ({ message, say }) => {
+  await say(`Hello world`);
+})
   };
  
   async function beerHelp({ message, client }) {
