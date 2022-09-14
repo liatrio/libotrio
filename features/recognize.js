@@ -2,7 +2,7 @@ const emoji = require("../services/recognizeServ");
 
 module.exports = function (app) {
   app.message(
-    ':cheers_to_the_beer_jar:',
+    ":cheers_to_the_beer_jar:",
     //   anyOf(directMention(), directMessage()),
     recognize
   );
