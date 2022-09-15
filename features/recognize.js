@@ -16,7 +16,7 @@ function emojiCountIn(text) {
     : 1;
   return multiplier;
 }
-
+/*
 async function userInfo(client, userId){
   const response = await client.users.info({ user: userId });
   if (response.ok) {
@@ -28,6 +28,7 @@ async function userInfo(client, userId){
     `Something went wrong while sending recognition. When retreiving user information from Slack, the API responded with the following error: ${response.message} \n Recognition has not been sent.`
   );
 }
+*/
 
 module.exports = function (app) {
   app.message(
@@ -39,18 +40,18 @@ module.exports = function (app) {
 
 async function recognize({ message, client }) {
   giverID=message.user
-  receiverID = Promise.all(ReceiverIdsIn(message.text).map(async (receiver)=>userInfo(client, receiver)))
+  receiverID = ReceiverIdsIn(message.text)
+  //Promise.all(ReceiverIdsIn(message.text).map(async (receiver)=>userInfo(client, receiver)))
   amount = emojiCountIn(message.text)
-  response = `You (${giverID}) sent ${amount} :beerjar: to ${receiverID[0]}`
-
-  /*const giverName = await client.users.profile.get({
+  giverName = await client.users.profile.get({
     user: giverID,
   });
-  const receiverName = await client.users.profile.get({
-    user: receiverID,
+  receiverName = await client.users.profile.get({
+    user: receiverID[0],
   });
-  */
   
+  response = `You (${giverName.profile.display_name}) sent ${amount} :beerjar: from ${receiverName.profile.display_name}`//to ${receiverName.user.profile.display_name}`
+  /*
   if (receiverID.length==1){
     await client.chat.postEphemeral({
       channel: message.channel,
@@ -67,4 +68,17 @@ async function recognize({ message, client }) {
       text: response,
     });
   }
+  */
+  await client.chat.postEphemeral({
+    channel: message.channel,
+    user: message.user,
+    text: response,
+  });
+  
+  await client.chat.postEphemeral({
+    channel: message.channel,
+    user: receiverID[0],
+    text: `You (${receiverName.profile.display_name}) been given ${amount} :beerjar: from ${giverName.profile.display_name}`,
+  });
+  
 }
