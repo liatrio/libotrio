@@ -51,7 +51,7 @@ async function recognize({ message, client }) {
     user: receiverID[0],
   });
 
-  var response = `You (${giverName.profile.display_name}) sent ${amount} :beerjar: from ${receiverName.profile.display_name}`; //to ${receiverName.user.profile.display_name}`
+  var response = `You (${giverName.profile.display_name}) sent \`${amount}\` :beerjar: to ${receiverName.profile.display_name}`; //to ${receiverName.user.profile.display_name}`
   /*
   if (receiverID.length==1){
     await client.chat.postEphemeral({
@@ -79,7 +79,7 @@ async function recognize({ message, client }) {
   await client.chat.postEphemeral({
     channel: message.channel,
     user: receiverID[0],
-    text: `You (${receiverName.profile.display_name}) been given ${amount} :beerjar: from ${giverName.profile.display_name}`,
+    text: `You (${receiverName.profile.display_name}) been given \`${amount}\` :beerjar: from ${giverName.profile.display_name}`,
   });
 
   await client.reactions.add({
@@ -90,9 +90,31 @@ async function recognize({ message, client }) {
 }
 
 async function Reaction({ event, client }) {
+  var giverID = event.user;
+  var originalMessage = await GetMessageReacted(client, event);
+  var receiverID = ReceiverIdsIn(originalMessage.text);
+  var giverName = await client.users.profile.get({
+    user: giverID,
+  });
+  var receiverName = await client.users.profile.get({
+    user: receiverID[0],
+  });
+
+  var response = `You (${giverName.profile.display_name}) sent \`1\` :beerjar: to ${receiverName.profile.display_name}`; //to ${receiverName.user.profile.display_name}`
   await client.chat.postEphemeral({
     channel: event.item.channel,
     user: event.user,
-    text: `You reacted to a message with beerjar`,
+    text: response,
   });
+}
+
+async function GetMessageReacted(client, message) {
+  const response = await client.conversations.replies({
+    channel: message.item.channel,
+    ts: message.item.ts,
+    limit: 1,
+  });
+  if (response.ok) {
+    return response.messages[0];
+  }
 }
