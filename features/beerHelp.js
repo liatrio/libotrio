@@ -3,7 +3,7 @@
 // obvious to users
 
 module.exports = function (app) {
-  app.message("@beerjar help", helpMe);
+  app.message("beerJar help", helpMe);
 };
 
 const helpMD = `
