@@ -1,7 +1,8 @@
-var i = 1;
+var i = 0;
 
-const respond = () => {
-  return `You've posted :cheers_to_the_beer_jar: #${i++} since last restart`;
+const respond = (count) => {
+  i = i + count;
+  return `You've gotten :cheers_to_the_beer_jar: #${i} since last restart`;
 };
 
 module.exports = { respond };
