@@ -1,7 +1,8 @@
-const emoji = require("../services/recognizeServ");
+//const emoji = require("../services/recognizeServ");
+const { ReactionMatches } = require("../middleware");
 const userRegex = /<@([a-zA-Z0-9]+)>/g;
 const multiplierRegex = /x([0-9]+)/;
-const beerEmojiRegex = new RegExp(":beerjar:", "g");
+//const beerEmojiRegex = new RegExp(":beerjar:", "g");
 
 function ReceiverIdsIn(text) {
   return (text.match(userRegex) || []).map((userMention) =>
@@ -32,25 +33,25 @@ async function userInfo(client, userId){
 
 module.exports = function (app) {
   app.message(
-    ":cheers_to_the_beer_jar:",
-    //   anyOf(directMention(), directMessage()),
+    ":cheers_to_the_beer_jar:", //   anyOf(directMention(), directMessage()),
     recognize
   );
+  app.event("reaction_added", ReactionMatches(":beerjar:"), Reaction);
 };
 
 async function recognize({ message, client }) {
-  giverID=message.user
-  receiverID = ReceiverIdsIn(message.text)
+  var giverID = message.user;
+  var receiverID = ReceiverIdsIn(message.text);
   //Promise.all(ReceiverIdsIn(message.text).map(async (receiver)=>userInfo(client, receiver)))
-  amount = emojiCountIn(message.text)
-  giverName = await client.users.profile.get({
+  var amount = emojiCountIn(message.text);
+  var giverName = await client.users.profile.get({
     user: giverID,
   });
-  receiverName = await client.users.profile.get({
+  var receiverName = await client.users.profile.get({
     user: receiverID[0],
   });
-  
-  response = `You (${giverName.profile.display_name}) sent ${amount} :beerjar: from ${receiverName.profile.display_name}`//to ${receiverName.user.profile.display_name}`
+
+  var response = `You (${giverName.profile.display_name}) sent ${amount} :beerjar: from ${receiverName.profile.display_name}`; //to ${receiverName.user.profile.display_name}`
   /*
   if (receiverID.length==1){
     await client.chat.postEphemeral({
@@ -74,11 +75,24 @@ async function recognize({ message, client }) {
     user: message.user,
     text: response,
   });
-  
+
   await client.chat.postEphemeral({
     channel: message.channel,
     user: receiverID[0],
     text: `You (${receiverName.profile.display_name}) been given ${amount} :beerjar: from ${giverName.profile.display_name}`,
   });
-  
+
+  await client.reactions.add({
+    channel: message.channel,
+    name: "beerjar",
+    timestamp: message.ts,
+  });
+}
+
+async function Reaction({ event, client }) {
+  await client.chat.postEphemeral({
+    channel: event.item.channel,
+    user: event.user,
+    text: `You reacted to a message with beerjar`,
+  });
 }

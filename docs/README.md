@@ -46,6 +46,7 @@ export MYSQL_USER=""
 export MYSQL_PASSWORD=""
 export SLACK_BOT_USER_OAUTH_TOKEN=""
 export SLACK_APP_TOKEN=""
+export SLACK_SIGNING_SECRET=""
 ```
 
 4. Run docker-compose up to run the bot in your workspace. Only one person needs to run the bot locally at any given time; anyone in the Slack workspace will be able to test against it.
