@@ -11,17 +11,20 @@ const helpMD = `
 :Beer: Hey you've made is to the Beerjar help center 
 
 How to use
-> :cheers_to_the_beer_jar: For missing this mornings stand up. 
- Note: people can get stacked for beers by adding the beer emoji
+> @benny For missing this mornings standup :cheers_to_the_beer_jar: 
+ Note: people can get stacked for beers by adding the beer emoji as a reaction.
 
 After a certain threshhold of 25 beerjars you will have to buy a beer for the person who beer jared you 
+
+A multiplier can be added to give your daily beerjars away.
+>@benny for missing standup :cheers_to_the_beer_jar:x5 
 
 
 viewing your balance
 > @beerjar check balance
 
 Viewing the scoreboard
-> @beerjar view scores
+> @beerjar show scores
 
 `;
 
