@@ -1,17 +1,1 @@
-{
-  "processes": {
-    "dbcf5975-b0b9-4365-9a20-4be7887d3941": { "parent": null, "children": [] }
-  },
-  "files": {
-    "/Users/evandliatrio/Documents/liatrio_bootcamp/libotrio/repositories/pings.js": [
-      "dbcf5975-b0b9-4365-9a20-4be7887d3941"
-    ],
-    "/Users/evandliatrio/Documents/liatrio_bootcamp/libotrio/repositories/databaseOps.js": [
-      "dbcf5975-b0b9-4365-9a20-4be7887d3941"
-    ],
-    "/Users/evandliatrio/Documents/liatrio_bootcamp/libotrio/services/beepBoopServ.js": [
-      "dbcf5975-b0b9-4365-9a20-4be7887d3941"
-    ]
-  },
-  "externalIds": {}
-}
+{"processes":{"c89486f9-3e1e-4b69-91d9-347a00105aff":{"parent":null,"children":[]}},"files":{"/Users/evandliatrio/Documents/liatrio_bootcamp/libotrio/features/tabCount.js":["c89486f9-3e1e-4b69-91d9-347a00105aff"],"/Users/evandliatrio/Documents/liatrio_bootcamp/libotrio/repositories/pings.js":["c89486f9-3e1e-4b69-91d9-347a00105aff"],"/Users/evandliatrio/Documents/liatrio_bootcamp/libotrio/repositories/databaseOps.js":["c89486f9-3e1e-4b69-91d9-347a00105aff"],"/Users/evandliatrio/Documents/liatrio_bootcamp/libotrio/services/beepBoopServ.js":["c89486f9-3e1e-4b69-91d9-347a00105aff"]},"externalIds":{}}
