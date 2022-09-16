@@ -52,4 +52,31 @@ describe("service/recognize", () => {
       expect(result).to.deep.equal(["TestUser1", "TestUser2", "TestUser4"]);
     });
   });
+
+  describe("EmojiCountIn", () => {
+    it("should set emoji counter to expected value.", async () => {
+      const text = ":cheers_to_the_beer_jar: x10 <@TestUser Testing Message";
+      const result = recognize.EmojiCountIn(text);
+      expect(result).to.deep.equal(10);
+    });
+    it("should get default value of 1 if no multiplier is specified", async () => {
+      const text = ":cheers_to_the_beer_jar: <@TestUser> Testing Message";
+      const result = recognize.EmojiCountIn(text);
+      expect(result).to.deep.equal(1);
+    });
+
+    it("should grab the first multiplier recognized in the message", async () => {
+      const text =
+        ":cheers_to_the_beer_jar: x4x5 <@TestUser> Testing Message x10";
+      const result = recognize.EmojiCountIn(text);
+      expect(result).to.deep.equal(4);
+    });
+
+    it("should grab the first multiplier from any location in the message", async () => {
+      const text =
+        ":cheers_to_the_beer_jar: <@TestUser> Testing Message. Just for being a working unit test I will be adding more beerjars. x10";
+      const result = recognize.EmojiCountIn(text);
+      expect(result).to.deep.equal(10);
+    });
+  });
 });

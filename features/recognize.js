@@ -1,16 +1,8 @@
 const { ReactionMatches } = require("../middleware");
 const recognize = require("../services/recognizeServ");
 
-const multiplierRegex = /x([0-9]+)/;
 //const beerEmojiRegex = new RegExp(":beerjar:", "g");
 
-function emojiCountIn(text) {
-  //const emojiCount = (text.match(beerEmojiRegex) || []).length;
-  const multiplier = text.match(multiplierRegex)
-    ? text.match(multiplierRegex)[1]
-    : 1;
-  return multiplier;
-}
 /*
 async function userInfo(client, userId){
   const response = await client.users.info({ user: userId });
@@ -37,7 +29,7 @@ async function Recognize({ message, client }) {
   var giverID = message.user;
   var receiverID = recognize.ReceiverIdsIn(message.text);
   //Promise.all(ReceiverIdsIn(message.text).map(async (receiver)=>userInfo(client, receiver)))
-  var amount = emojiCountIn(message.text);
+  var amount = recognize.EmojiCountIn(message.text);
   var giverName = await client.users.profile.get({
     user: giverID,
   });

@@ -1,5 +1,6 @@
 var i = 0;
 const userRegex = /<@([a-zA-Z0-9]+)>/g;
+const multiplierRegex = /x([0-9]+)/;
 
 const respond = (count) => {
   i = i + count;
@@ -12,7 +13,16 @@ function ReceiverIdsIn(text) {
   );
 }
 
+function EmojiCountIn(text) {
+  //const emojiCount = (text.match(beerEmojiRegex) || []).length;
+  const multiplier = text.match(multiplierRegex)
+    ? text.match(multiplierRegex)[1]
+    : 1;
+  return +multiplier;
+}
+
 module.exports = {
   respond,
   ReceiverIdsIn,
+  EmojiCountIn,
 };
