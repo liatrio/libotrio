@@ -8,22 +8,25 @@ const chai     = require("chai"), //inlucdeing what I need from chai explicitly
       MySql    = require('mysql2');
 
 describe('TabCount', () => {
-  afterEach(() => {
+  //afterEach(() => {
     sinon.restore();
-  });
+  //});
 
-
-  let poolMock = sinon.createStubInstance(poolMock)
   var tabMock = sinon.mock(MySql);
+  console.log(tabMock)
   tabMock.expects("createPool").once().returns("");
+  let poolMock = sinon.stub(tabMock);
 
   it('should pass', async() => {
+
+    const callback = sinon.spy();
+
+    
+
     // spy getConnection
-    var save = sinon.spy(tabMock.getConnection());
     // stub out GetTab withArgs(name)
-    //var tab = sinon.createStubInstance(TabCount.GetTab('bob'));
     // spy mysql2.query
-   // assert(TabCount.GetTab('bob'));
+   TabCount.GetTab('bob');
   });
 
 });
