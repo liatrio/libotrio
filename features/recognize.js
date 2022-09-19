@@ -26,18 +26,15 @@ module.exports = function (app) {
 };
 
 async function Recognize({ message, client }) {
-  var giverID = message.user;
-  var receiverID = recognize.ReceiverIdsIn(message.text);
   //Promise.all(ReceiverIdsIn(message.text).map(async (receiver)=>userInfo(client, receiver)))
-  var amount = recognize.EmojiCountIn(message.text);
-  var giverName = await client.users.profile.get({
-    user: giverID,
-  });
-  var receiverName = await client.users.profile.get({
-    user: receiverID[0],
-  });
+  var discontent = {
+    giver: message.user,
+    receivers: recognize.ReceiverIdsIn(message.text),
+    count: recognize.EmojiCountIn(message.text),
+    message: message.text,
+    channel: message.channel,
+  };
 
-  var response = `You (${giverName.profile.display_name}) sent \`${amount}\` :beerjar: to ${receiverName.profile.display_name}`; //to ${receiverName.user.profile.display_name}`
   /*
   if (receiverID.length==1){
     await client.chat.postEphemeral({
@@ -56,42 +53,30 @@ async function Recognize({ message, client }) {
     });
   }
   */
-  await client.chat.postEphemeral({
-    channel: message.channel,
-    user: message.user,
-    text: response,
-  });
+  await SendNotificationToGiver(client, discontent);
 
-  await client.chat.postEphemeral({
-    channel: message.channel,
-    user: receiverID[0],
-    text: `You (${receiverName.profile.display_name}) been given \`${amount}\` :beerjar: from ${giverName.profile.display_name}`,
-  });
+  await SendNotificationToReceivers(client, discontent);
 
   await client.reactions.add({
-    channel: message.channel,
+    channel: discontent.channel,
     name: "beerjar",
     timestamp: message.ts,
   });
 }
 
 async function Reaction({ event, client }) {
-  var giverID = event.user;
   var originalMessage = await GetMessageReacted(client, event);
-  var receiverID = recognize.ReceiverIdsIn(originalMessage.text);
-  var giverName = await client.users.profile.get({
-    user: giverID,
-  });
-  var receiverName = await client.users.profile.get({
-    user: receiverID[0],
-  });
-
-  var response = `You (${giverName.profile.display_name}) sent \`1\` :beerjar: to ${receiverName.profile.display_name}`; //to ${receiverName.user.profile.display_name}`
-  await client.chat.postEphemeral({
+  var discontent = {
+    giver: event.user,
+    receivers: recognize.ReceiverIdsIn(originalMessage.text),
+    count: 1,
+    message: originalMessage.text,
     channel: event.item.channel,
-    user: event.user,
-    text: response,
-  });
+  };
+
+  await SendNotificationToGiver(client, discontent);
+
+  await SendNotificationToReceivers(client, discontent);
 }
 
 async function GetMessageReacted(client, message) {
@@ -102,5 +87,45 @@ async function GetMessageReacted(client, message) {
   });
   if (response.ok) {
     return response.messages[0];
+  }
+}
+
+async function SendNotificationToGiver(client, discontent) {
+  var giverName = await client.users.profile.get({
+    user: discontent.giver,
+  });
+  var nameList = ``;
+  for (let i = 0; i < discontent.receivers.length; i++) {
+    var receiverName = await client.users.profile.get({
+      user: discontent.receivers[i],
+    });
+    if (i < discontent.receivers.length - 1) {
+      nameList = nameList + receiverName.profile.display_name + `, `;
+    } else {
+      nameList += `and ` + receiverName.profile.display_name;
+    }
+  }
+  var response = `You (${giverName.profile.display_name}) sent \`${discontent.count}\` :beerjar: to ${nameList}`;
+  await client.chat.postEphemeral({
+    channel: discontent.channel,
+    user: discontent.giver,
+    text: response,
+  });
+}
+
+async function SendNotificationToReceivers(client, discontent) {
+  var giverName = await client.users.profile.get({
+    user: discontent.giver,
+  });
+  for (let i = 0; i < discontent.receivers.length; i++) {
+    var receiverName = await client.users.profile.get({
+      user: discontent.receivers[i],
+    });
+
+    var response = `You (${receiverName.profile.display_name}) been given \`${discontent.count}\` :beerjar: from ${giverName.profile.display_name}`;
+    await client.chat.postMessage({
+      channel: discontent.receivers[i],
+      text: response,
+    });
   }
 }

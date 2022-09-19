@@ -1,4 +1,5 @@
 const expect = require("chai").expect;
+
 const recognize = require("../../services/recognizeServ");
 
 describe("service/recognize", () => {
