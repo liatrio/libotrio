@@ -5,3 +5,4 @@ variables.sh
 */terraform.tfstate.backup
 .terraform
 .vscode
+.nyc_output
