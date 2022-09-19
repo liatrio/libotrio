@@ -3,17 +3,20 @@ const MySql = require('mysql2');
 
 const { resolveConfig } = require("prettier");
 
-module.exports = {
-  GetTab: async (name) => {
-    var pool = await MySql.createPool({});
-    var conn = await pool.getConnection();
-    const query = 'select * from users where name = ?';
-    var params = [ name ];
-  
-    const dbResult = await conn.query(query, params);
-  
-    conn.release();
+getDBTab = function (user) {
+  return 1 // this will eventually call a db helper function
+}
 
-    return dbResult;
-  },
+module.exports = function (app) {
+  app.message(
+    ":cheers_to_the_beer_jar: tab",
+    SendTab
+  );
+};
+
+async function SendTab({message, client}) {
+  await client.chat.postMessage({
+    channel: message.user,
+    text: "\`1\`"
+  });
 };

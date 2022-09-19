@@ -21,7 +21,7 @@ describe('TabCount', () => {
 
     const callback = sinon.spy();
 
-    
+
 
     // spy getConnection
     // stub out GetTab withArgs(name)
