@@ -53,7 +53,7 @@ async function Recognize({ message, client }) {
     });
   }
   */
-  await SendNotificationToGiver(client, discontent);
+  await recognize.SendNotificationToGiver(client, discontent);
 
   await SendNotificationToReceivers(client, discontent);
 
@@ -74,7 +74,7 @@ async function Reaction({ event, client }) {
     channel: event.item.channel,
   };
 
-  await SendNotificationToGiver(client, discontent);
+  await recognize.SendNotificationToGiver(client, discontent);
 
   await SendNotificationToReceivers(client, discontent);
 }
@@ -88,29 +88,6 @@ async function GetMessageReacted(client, message) {
   if (response.ok) {
     return response.messages[0];
   }
-}
-
-async function SendNotificationToGiver(client, discontent) {
-  var giverName = await client.users.profile.get({
-    user: discontent.giver,
-  });
-  var nameList = ``;
-  for (let i = 0; i < discontent.receivers.length; i++) {
-    var receiverName = await client.users.profile.get({
-      user: discontent.receivers[i],
-    });
-    if (i < discontent.receivers.length - 1) {
-      nameList = nameList + receiverName.profile.display_name + `, `;
-    } else {
-      nameList += `and ` + receiverName.profile.display_name;
-    }
-  }
-  var response = `You (${giverName.profile.display_name}) sent \`${discontent.count}\` :beerjar: to ${nameList}`;
-  await client.chat.postEphemeral({
-    channel: discontent.channel,
-    user: discontent.giver,
-    text: response,
-  });
 }
 
 async function SendNotificationToReceivers(client, discontent) {
@@ -129,3 +106,5 @@ async function SendNotificationToReceivers(client, discontent) {
     });
   }
 }
+
+

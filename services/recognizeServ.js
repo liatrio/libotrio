@@ -21,7 +21,31 @@ function EmojiCountIn(text) {
   return +multiplier;
 }
 
+async function SendNotificationToGiver(client, discontent) {
+  var giverName = await client.users.profile.get({
+    user: discontent.giver,
+  });
+  var nameList = ``;
+  for (let i = 0; i < discontent.receivers.length; i++) {
+    var receiverName = await client.users.profile.get({
+      user: discontent.receivers[i],
+    });
+    if (i < discontent.receivers.length - 1) {
+      nameList = nameList + receiverName.profile.display_name + `, `;
+    } else {
+      nameList += `and ` + receiverName.profile.display_name;
+    }
+  }
+  var reply = `You (${giverName.profile.display_name}) sent \`${discontent.count}\` :beerjar: to ${nameList}`;
+  const response = await client.chat.postEphemeral({
+    channel: discontent.channel,
+    user: discontent.giver,
+    text: reply,
+  });
+}
+
 module.exports = {
+  SendNotificationToGiver,
   respond,
   ReceiverIdsIn,
   EmojiCountIn,
