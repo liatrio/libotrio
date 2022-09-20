@@ -21,8 +21,50 @@ function EmojiCountIn(text) {
   return +multiplier;
 }
 
+async function SendNotificationToGiver(client, discontent) {
+  var giverName = await client.users.profile.get({
+    user: discontent.giver,
+  });
+  var nameList = ``;
+  for (let i = 0; i < discontent.receivers.length; i++) {
+    var receiverName = await client.users.profile.get({
+      user: discontent.receivers[i],
+    });
+    if (i < discontent.receivers.length - 1) {
+      nameList = nameList + receiverName.profile.display_name + `, `;
+    } else {
+      nameList += `and ` + receiverName.profile.display_name;
+    }
+  }
+  var response = `You (${giverName.profile.display_name}) sent \`${discontent.count}\` :beerjar: to ${nameList}`;
+  await client.chat.postEphemeral({
+    channel: discontent.channel,
+    user: discontent.giver,
+    text: response,
+  });
+}
+
+async function SendNotificationToReceivers(client, discontent) {
+  var giverName = await client.users.profile.get({
+    user: discontent.giver,
+  });
+  for (let i = 0; i < discontent.receivers.length; i++) {
+    var receiverName = await client.users.profile.get({
+      user: discontent.receivers[i],
+    });
+
+    var response = `You (${receiverName.profile.display_name}) been given \`${discontent.count}\` :beerjar: from ${giverName.profile.display_name}`;
+    await client.chat.postMessage({
+      channel: discontent.receivers[i],
+      text: response,
+    });
+  }
+}
+
 module.exports = {
   respond,
   ReceiverIdsIn,
   EmojiCountIn,
+  SendNotificationToGiver,
+  SendNotificationToReceivers,
 };

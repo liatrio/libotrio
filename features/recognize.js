@@ -1,21 +1,10 @@
 const { ReactionMatches } = require("../middleware");
 const recognize = require("../services/recognizeServ");
+const { UserInfo } = require("../services/apiWrappers");
+const errorHandler = require("../services/errorHandler");
+const { SlackError, BeerJarError } = require("../services/error");
 
 //const beerEmojiRegex = new RegExp(":beerjar:", "g");
-
-/*
-async function userInfo(client, userId){
-  const response = await client.users.info({ user: userId });
-  if (response.ok) {
-    return response.user;
-  }
-  throw new SlackError(
-    "users.info",
-    response.error,
-    `Something went wrong while sending recognition. When retreiving user information from Slack, the API responded with the following error: ${response.message} \n Recognition has not been sent.`
-  );
-}
-*/
 
 module.exports = function (app) {
   app.message(
@@ -27,56 +16,62 @@ module.exports = function (app) {
 
 async function Recognize({ message, client }) {
   //Promise.all(ReceiverIdsIn(message.text).map(async (receiver)=>userInfo(client, receiver)))
-  var discontent = {
-    giver: message.user,
-    receivers: recognize.ReceiverIdsIn(message.text),
-    count: recognize.EmojiCountIn(message.text),
-    message: message.text,
-    channel: message.channel,
-  };
-
-  /*
-  if (receiverID.length==1){
-    await client.chat.postEphemeral({
+  try {
+    var discontent = {
+      giver: await UserInfo(client, message.user),
+      receivers: recognize.ReceiverIdsIn(message.text),
+      count: recognize.EmojiCountIn(message.text),
+      message: message.text,
       channel: message.channel,
-      user: message.user,
-      text: response,
-    });
-  }else if(receiversID.length>1){
-    for(let i=1;i<receiversID.length;i++){
-      response+=` ${receiverID[i]}`
+      timestamp: message.ts,
+    };
+  } catch (error) {
+    if (error instanceof SlackError) {
+      return errorHandler.HandleSlackError(client, message, error);
+    } else if (error instanceof BeerJarError) {
+      return errorHandler.HandlesBeerJarError(client, message, error);
+    } else {
+      return errorHandler.HandleGenericError(client, message, error);
     }
-    await client.chat.postEphemeral({
-      channel: message.channel,
-      user: message.user,
-      text: response,
-    });
   }
-  */
-  await SendNotificationToGiver(client, discontent);
+  await recognize.SendNotificationToGiver(client, discontent);
 
-  await SendNotificationToReceivers(client, discontent);
+  await recognize.SendNotificationToReceivers(client, discontent);
 
   await client.reactions.add({
     channel: discontent.channel,
     name: "beerjar",
-    timestamp: message.ts,
+    timestamp: discontent.timestamp,
   });
 }
 
 async function Reaction({ event, client }) {
-  var originalMessage = await GetMessageReacted(client, event);
-  var discontent = {
-    giver: event.user,
-    receivers: recognize.ReceiverIdsIn(originalMessage.text),
-    count: 1,
-    message: originalMessage.text,
-    channel: event.item.channel,
-  };
+  try {
+    var originalMessage = await GetMessageReacted(client, event);
 
-  await SendNotificationToGiver(client, discontent);
+    if (!originalMessage.text.includes(":cheers_to_the_beer_jar:")) {
+      return;
+    }
+    var discontent = {
+      giver: await UserInfo(client, event.user),
+      receivers: recognize.ReceiverIdsIn(originalMessage.text),
+      count: 1,
+      message: originalMessage.text,
+      channel: event.item.channel,
+      timestamp: originalMessage.ts,
+    };
+  } catch (error) {
+    if (error instanceof SlackError) {
+      return errorHandler.HandleSlackError(client, event, error);
+    } else if (error instanceof BeerJarError) {
+      return errorHandler.HandleBeerJarError(client, event, error);
+    } else {
+      return errorHandler.HandleGenericError(client, event, error);
+    }
+  }
+  await recognize.SendNotificationToGiver(client, discontent);
 
-  await SendNotificationToReceivers(client, discontent);
+  await recognize.SendNotificationToReceivers(client, discontent);
 }
 
 async function GetMessageReacted(client, message) {
@@ -87,45 +82,5 @@ async function GetMessageReacted(client, message) {
   });
   if (response.ok) {
     return response.messages[0];
-  }
-}
-
-async function SendNotificationToGiver(client, discontent) {
-  var giverName = await client.users.profile.get({
-    user: discontent.giver,
-  });
-  var nameList = ``;
-  for (let i = 0; i < discontent.receivers.length; i++) {
-    var receiverName = await client.users.profile.get({
-      user: discontent.receivers[i],
-    });
-    if (i < discontent.receivers.length - 1) {
-      nameList = nameList + receiverName.profile.display_name + `, `;
-    } else {
-      nameList += `and ` + receiverName.profile.display_name;
-    }
-  }
-  var response = `You (${giverName.profile.display_name}) sent \`${discontent.count}\` :beerjar: to ${nameList}`;
-  await client.chat.postEphemeral({
-    channel: discontent.channel,
-    user: discontent.giver,
-    text: response,
-  });
-}
-
-async function SendNotificationToReceivers(client, discontent) {
-  var giverName = await client.users.profile.get({
-    user: discontent.giver,
-  });
-  for (let i = 0; i < discontent.receivers.length; i++) {
-    var receiverName = await client.users.profile.get({
-      user: discontent.receivers[i],
-    });
-
-    var response = `You (${receiverName.profile.display_name}) been given \`${discontent.count}\` :beerjar: from ${giverName.profile.display_name}`;
-    await client.chat.postMessage({
-      channel: discontent.receivers[i],
-      text: response,
-    });
   }
 }
