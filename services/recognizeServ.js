@@ -43,9 +43,37 @@ async function SendNotificationToGiver(client, discontent) {
     text: reply,
   });
 }
+async function SendNotificationToReceivers(client, discontent) {
+  var giverName = await client.users.profile.get({
+    user: discontent.giver,
+  });
+  for (let i = 0; i < discontent.receivers.length; i++) {
+    var receiverName = await client.users.profile.get({
+      user: discontent.receivers[i],
+    });
+
+    var response = `You (${receiverName.profile.display_name}) been given \`${discontent.count}\` :beerjar: from ${giverName.profile.display_name}`;
+    await client.chat.postMessage({
+      channel: discontent.receivers[i],
+      text: response,
+    });
+  }
+}
+async function GetMessageReacted(client, event) {
+  const response = await client.conversations.replies({
+    channel: event.item.channel,
+    ts: event.item.ts,
+    limit: 1,
+  });
+  if (response.ok) {
+    return response.messages[0];
+  }
+}
 
 module.exports = {
   SendNotificationToGiver,
+  SendNotificationToReceivers,
+  GetMessageReacted,
   respond,
   ReceiverIdsIn,
   EmojiCountIn,

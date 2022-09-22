@@ -25,7 +25,7 @@ module.exports = function (app) {
   app.event("reaction_added", ReactionMatches(":beerjar:"), Reaction);
 };
 
-async function Recognize({ message, client }) {
+async function Recognize(client, message) {
   //Promise.all(ReceiverIdsIn(message.text).map(async (receiver)=>userInfo(client, receiver)))
   var discontent = {
     giver: message.user,
@@ -54,18 +54,17 @@ async function Recognize({ message, client }) {
   }
   */
   await recognize.SendNotificationToGiver(client, discontent);
-
-  await SendNotificationToReceivers(client, discontent);
+  await recognize.SendNotificationToReceivers(client, discontent);
 
   await client.reactions.add({
-    channel: discontent.channel,
+    channel: message.channel,
     name: "beerjar",
     timestamp: message.ts,
   });
 }
 
-async function Reaction({ event, client }) {
-  var originalMessage = await GetMessageReacted(client, event);
+async function Reaction( client, event ) {
+  var originalMessage = await recognize.GetMessageReacted(client, event);
   var discontent = {
     giver: event.user,
     receivers: recognize.ReceiverIdsIn(originalMessage.text),
@@ -75,36 +74,13 @@ async function Reaction({ event, client }) {
   };
 
   await recognize.SendNotificationToGiver(client, discontent);
-
-  await SendNotificationToReceivers(client, discontent);
+  await recognize.SendNotificationToReceivers(client, discontent);
 }
 
-async function GetMessageReacted(client, message) {
-  const response = await client.conversations.replies({
-    channel: message.item.channel,
-    ts: message.item.ts,
-    limit: 1,
-  });
-  if (response.ok) {
-    return response.messages[0];
-  }
-}
 
-async function SendNotificationToReceivers(client, discontent) {
-  var giverName = await client.users.profile.get({
-    user: discontent.giver,
-  });
-  for (let i = 0; i < discontent.receivers.length; i++) {
-    var receiverName = await client.users.profile.get({
-      user: discontent.receivers[i],
-    });
-
-    var response = `You (${receiverName.profile.display_name}) been given \`${discontent.count}\` :beerjar: from ${giverName.profile.display_name}`;
-    await client.chat.postMessage({
-      channel: discontent.receivers[i],
-      text: response,
-    });
-  }
-}
+module.exports = {
+  Reaction,
+  Recognize,
+};
 
 
