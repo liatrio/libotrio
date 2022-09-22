@@ -137,8 +137,8 @@ describe("features/recognize", () => {
     })
   })
   describe.only("Reaction", () => {
-    describe("When message is sent with specified emoji", ()=> {
-      it("Adds the emoji to it", async ()=> {
+    describe("When message is reacted to with specific emoji", ()=> {
+      it("Give beerjar and notify giver/receivers", async ()=> {
         var emojiCount=chance.integer({min: 1, max:5});
         var receivers=[`U${chance.string({length:8, alpha:true, numeric:true, casing:"upper"})}`,`U${chance.string({length:8, alpha:true, numeric:true, casing:"upper"})}`];
         eventObj = {
