@@ -1,3 +1,4 @@
 chart
 tf/.terraform
 .vscode
+.nyc*
