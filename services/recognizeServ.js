@@ -14,7 +14,6 @@ function ReceiverIdsIn(text) {
 }
 
 function EmojiCountIn(text) {
-  //const emojiCount = (text.match(beerEmojiRegex) || []).length;
   const multiplier = text.match(multiplierRegex)
     ? text.match(multiplierRegex)[1]
     : 1;

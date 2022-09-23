@@ -16,7 +16,6 @@ describe("features/recognize", () => {
   let SendNotificationToGiverStub;
   let SendNotificationToReceiversStub;
   let GetMessageReactedStub;
-  //let recognize
 
   beforeEach(function () {
     client = {
@@ -265,6 +264,7 @@ describe("features/recognize", () => {
         SendNotificationToGiverStub.resolves(responseObj);
         GetMessageReactedStub.resolves(responseMessageObj.messages[0]);
         await features.Reaction(client, eventObj);
+        
         /* SendNotificationToGiver */
         assert.isOk(SendNotificationToGiverStub.calledOnce);
         assert.equal(SendNotificationToGiverStub.getCall(0).args[0], client);
