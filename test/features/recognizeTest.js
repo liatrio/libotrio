@@ -107,7 +107,6 @@ describe("features/recognize", () => {
           channel: eventObj.channel,
         };
 
-
         ReceiverIdsInStub.returns(receivers);
         EmojiCountInStub.returns(emojiCount);
         SendNotificationToReceiversStub.resolves(responseObj);
@@ -266,7 +265,7 @@ describe("features/recognize", () => {
         SendNotificationToGiverStub.resolves(responseObj);
         GetMessageReactedStub.resolves(responseMessageObj.messages[0]);
         await features.Reaction(client, eventObj);
-        
+
         /* SendNotificationToGiver */
         assert.isOk(SendNotificationToGiverStub.calledOnce);
         assert.equal(SendNotificationToGiverStub.getCall(0).args[0], client);

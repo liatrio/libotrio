@@ -35,6 +35,7 @@ async function SendNotificationToGiver(client, beerJarData) {
       nameList += `and ` + receiverName.profile.display_name;
     }
   }
+
   var reply = `You (${giverName.profile.display_name}) sent \`${beerJarData.count}\` :beerjar: to ${nameList}`;
   const response = await client.chat.postEphemeral({
     channel: beerJarData.channel,

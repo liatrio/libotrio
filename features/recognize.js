@@ -1,7 +1,6 @@
 const { ReactionMatches } = require("../middleware");
 const recognize = require("../services/recognizeServ");
 
-
 module.exports = function (app) {
   app.message(":cheers_to_the_beer_jar:", Recognize);
   app.event("reaction_added", ReactionMatches(":beerjar:"), Reaction);
@@ -16,7 +15,6 @@ async function Recognize(client, message) {
     channel: message.channel,
   };
 
-  
   await recognize.SendNotificationToGiver(client, beerJarData);
   await recognize.SendNotificationToReceivers(client, beerJarData);
 
@@ -27,7 +25,7 @@ async function Recognize(client, message) {
   });
 }
 
-async function Reaction( client, event ) {
+async function Reaction(client, event) {
   var originalMessage = await recognize.GetMessageReacted(client, event);
   var beerJarData = {
     giver: event.user,
@@ -41,10 +39,7 @@ async function Reaction( client, event ) {
   await recognize.SendNotificationToReceivers(client, beerJarData);
 }
 
-
 module.exports = {
   Reaction,
   Recognize,
 };
-
-
