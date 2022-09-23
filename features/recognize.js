@@ -63,7 +63,7 @@ async function Recognize(client, message) {
   });
 }
 
-async function Reaction( client, event ) {
+async function Reaction(client, event) {
   var originalMessage = await recognize.GetMessageReacted(client, event);
   var discontent = {
     giver: event.user,
@@ -77,10 +77,7 @@ async function Reaction( client, event ) {
   await recognize.SendNotificationToReceivers(client, discontent);
 }
 
-
 module.exports = {
   Reaction,
   Recognize,
 };
-
-
