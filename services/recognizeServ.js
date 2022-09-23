@@ -20,40 +20,40 @@ function EmojiCountIn(text) {
   return +multiplier;
 }
 
-async function SendNotificationToGiver(client, discontent) {
+async function SendNotificationToGiver(client, beerJarData) {
   var giverName = await client.users.profile.get({
-    user: discontent.giver,
+    user: beerJarData.giver,
   });
   var nameList = ``;
-  for (let i = 0; i < discontent.receivers.length; i++) {
+  for (let i = 0; i < beerJarData.receivers.length; i++) {
     var receiverName = await client.users.profile.get({
-      user: discontent.receivers[i],
+      user: beerJarData.receivers[i],
     });
-    if (i < discontent.receivers.length - 1) {
+    if (i < beerJarData.receivers.length - 1) {
       nameList = nameList + receiverName.profile.display_name + `, `;
     } else {
       nameList += `and ` + receiverName.profile.display_name;
     }
   }
-  var reply = `You (${giverName.profile.display_name}) sent \`${discontent.count}\` :beerjar: to ${nameList}`;
+  var reply = `You (${giverName.profile.display_name}) sent \`${beerJarData.count}\` :beerjar: to ${nameList}`;
   const response = await client.chat.postEphemeral({
-    channel: discontent.channel,
-    user: discontent.giver,
+    channel: beerJarData.channel,
+    user: beerJarData.giver,
     text: reply,
   });
 }
-async function SendNotificationToReceivers(client, discontent) {
+async function SendNotificationToReceivers(client, beerJarData) {
   var giverName = await client.users.profile.get({
-    user: discontent.giver,
+    user: beerJarData.giver,
   });
-  for (let i = 0; i < discontent.receivers.length; i++) {
+  for (let i = 0; i < beerJarData.receivers.length; i++) {
     var receiverName = await client.users.profile.get({
-      user: discontent.receivers[i],
+      user: beerJarData.receivers[i],
     });
 
-    var response = `You (${receiverName.profile.display_name}) been given \`${discontent.count}\` :beerjar: from ${giverName.profile.display_name}`;
+    var response = `You (${receiverName.profile.display_name}) been given \`${beerJarData.count}\` :beerjar: from ${giverName.profile.display_name}`;
     await client.chat.postMessage({
-      channel: discontent.receivers[i],
+      channel: beerJarData.receivers[i],
       text: response,
     });
   }

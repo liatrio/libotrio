@@ -99,13 +99,15 @@ describe("features/recognize", () => {
         responseObj = {
           ok: true,
         };
-        discontent = {
+        beerJarData = {
           giver: eventObj.user,
           receivers: receivers,
           count: emojiCount,
           message: eventObj.text,
           channel: eventObj.channel,
         };
+
+
         ReceiverIdsInStub.returns(receivers);
         EmojiCountInStub.returns(emojiCount);
         SendNotificationToReceiversStub.resolves(responseObj);
@@ -128,7 +130,7 @@ describe("features/recognize", () => {
         assert.equal(SendNotificationToGiverStub.getCall(0).args[0], client);
         assert.equal(
           SendNotificationToGiverStub.getCall(0).args[1].message,
-          discontent.message
+          beerJarData.message
         );
         /* SendNotificationToReceivers */
         assert.isOk(SendNotificationToReceiversStub.calledOnce);
@@ -138,7 +140,7 @@ describe("features/recognize", () => {
         );
         assert.equal(
           SendNotificationToReceiversStub.getCall(0).args[1].message,
-          discontent.message
+          beerJarData.message
         );
         /* EmojiCountIn */
         assert.isOk(EmojiCountInStub.calledOnce);
@@ -252,7 +254,7 @@ describe("features/recognize", () => {
             next_cursor: "bmV4dF90czoxNDg0Njc4MjkwNTE3MDkx",
           },
         };
-        discontent = {
+        beerJarData = {
           giver: eventObj.user,
           receivers: receivers,
           count: 1,
@@ -270,23 +272,23 @@ describe("features/recognize", () => {
         assert.equal(SendNotificationToGiverStub.getCall(0).args[0], client);
         assert.equal(
           SendNotificationToGiverStub.getCall(0).args[1].message,
-          discontent.message
+          beerJarData.message
         );
         assert.equal(
           SendNotificationToGiverStub.getCall(0).args[1].giver,
-          discontent.giver
+          beerJarData.giver
         );
         assert.equal(
           SendNotificationToGiverStub.getCall(0).args[1].receivers,
-          discontent.receivers
+          beerJarData.receivers
         );
         assert.equal(
           SendNotificationToGiverStub.getCall(0).args[1].channel,
-          discontent.channel
+          beerJarData.channel
         );
         assert.equal(
           SendNotificationToGiverStub.getCall(0).args[1].count,
-          discontent.count
+          beerJarData.count
         );
 
         /* SendNotificationToReceivers */
@@ -297,23 +299,23 @@ describe("features/recognize", () => {
         );
         assert.equal(
           SendNotificationToReceiversStub.getCall(0).args[1].message,
-          discontent.message
+          beerJarData.message
         );
         assert.equal(
           SendNotificationToReceiversStub.getCall(0).args[1].giver,
-          discontent.giver
+          beerJarData.giver
         );
         assert.equal(
           SendNotificationToReceiversStub.getCall(0).args[1].receivers,
-          discontent.receivers
+          beerJarData.receivers
         );
         assert.equal(
           SendNotificationToReceiversStub.getCall(0).args[1].channel,
-          discontent.channel
+          beerJarData.channel
         );
         assert.equal(
           SendNotificationToReceiversStub.getCall(0).args[1].count,
-          discontent.count
+          beerJarData.count
         );
         /* GetMessageReacted */
         assert.isOk(GetMessageReactedStub.calledOnce);

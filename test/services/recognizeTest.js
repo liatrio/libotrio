@@ -183,7 +183,7 @@ describe("service/recognize", () => {
   describe("SendNotificationToGiver", () => {
     describe("When message contains giver and recipients", () => {
       it("Sends ephemeral message as response", async () => {
-        var discontent = {
+        var beerJarData = {
           giver: `U${chance.string({
             length: 8,
             alpha: true,
@@ -224,18 +224,18 @@ describe("service/recognize", () => {
         };
         client.users.profile.get.resolves(getObj);
         client.chat.postEphemeral.resolves(chatObj);
-        await recognize.SendNotificationToGiver(client, discontent);
+        await recognize.SendNotificationToGiver(client, beerJarData);
 
         assert.isOk(client.users.profile.get.calledThrice);
         assert.isOk(client.chat.postEphemeral.calledOnce);
 
         assert.equal(
           client.chat.postEphemeral.getCall(0).args[0].channel,
-          discontent.channel
+          beerJarData.channel
         );
         assert.equal(
           client.chat.postEphemeral.getCall(0).args[0].user,
-          discontent.giver
+          beerJarData.giver
         );
         assert.include(
           client.chat.postEphemeral.getCall(0).args[0].text,
@@ -243,19 +243,19 @@ describe("service/recognize", () => {
         );
         assert.include(
           client.chat.postEphemeral.getCall(0).args[0].text,
-          discontent.count
+          beerJarData.count
         );
         assert.equal(
           client.users.profile.get.getCall(1).args[0].user,
-          discontent.receivers[0]
+          beerJarData.receivers[0]
         );
         assert.equal(
           client.users.profile.get.getCall(2).args[0].user,
-          discontent.receivers[1]
+          beerJarData.receivers[1]
         );
         assert.equal(
           client.users.profile.get.getCall(0).args[0].user,
-          discontent.giver
+          beerJarData.giver
         );
 
         //client.chat.("postEphemeral").once()
@@ -266,7 +266,7 @@ describe("service/recognize", () => {
   describe("SendNotificationToReceivers", () => {
     describe("When message contains giver and recipients", () => {
       it("Sends ephemeral message as response", async () => {
-        var discontent = {
+        var beerJarData = {
           giver: `U${chance.string({
             length: 8,
             alpha: true,
@@ -307,18 +307,18 @@ describe("service/recognize", () => {
         };
         client.users.profile.get.resolves(getObj);
         client.chat.postMessage.resolves(chatObj);
-        await recognize.SendNotificationToReceivers(client, discontent);
+        await recognize.SendNotificationToReceivers(client, beerJarData);
 
         assert.isOk(client.users.profile.get.calledThrice);
         assert.isOk(client.chat.postMessage.calledTwice);
 
         assert.equal(
           client.chat.postMessage.getCall(0).args[0].channel,
-          discontent.receivers[0]
+          beerJarData.receivers[0]
         );
         assert.equal(
           client.chat.postMessage.getCall(1).args[0].channel,
-          discontent.receivers[1]
+          beerJarData.receivers[1]
         );
         assert.include(
           client.chat.postMessage.getCall(0).args[0].text,
@@ -326,19 +326,19 @@ describe("service/recognize", () => {
         );
         assert.include(
           client.chat.postMessage.getCall(0).args[0].text,
-          discontent.count
+          beerJarData.count
         );
         assert.equal(
           client.users.profile.get.getCall(1).args[0].user,
-          discontent.receivers[0]
+          beerJarData.receivers[0]
         );
         assert.equal(
           client.users.profile.get.getCall(2).args[0].user,
-          discontent.receivers[1]
+          beerJarData.receivers[1]
         );
         assert.equal(
           client.users.profile.get.getCall(0).args[0].user,
-          discontent.giver
+          beerJarData.giver
         );
 
         //client.chat.("postEphemeral").once()

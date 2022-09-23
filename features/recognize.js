@@ -8,7 +8,7 @@ module.exports = function (app) {
 };
 
 async function Recognize(client, message) {
-  var discontent = {
+  var beerJarData = {
     giver: message.user,
     receivers: recognize.ReceiverIdsIn(message.text),
     count: recognize.EmojiCountIn(message.text),
@@ -17,8 +17,8 @@ async function Recognize(client, message) {
   };
 
   
-  await recognize.SendNotificationToGiver(client, discontent);
-  await recognize.SendNotificationToReceivers(client, discontent);
+  await recognize.SendNotificationToGiver(client, beerJarData);
+  await recognize.SendNotificationToReceivers(client, beerJarData);
 
   await client.reactions.add({
     channel: message.channel,
@@ -29,7 +29,7 @@ async function Recognize(client, message) {
 
 async function Reaction( client, event ) {
   var originalMessage = await recognize.GetMessageReacted(client, event);
-  var discontent = {
+  var beerJarData = {
     giver: event.user,
     receivers: recognize.ReceiverIdsIn(originalMessage.text),
     count: 1,
@@ -37,8 +37,8 @@ async function Reaction( client, event ) {
     channel: event.item.channel,
   };
 
-  await recognize.SendNotificationToGiver(client, discontent);
-  await recognize.SendNotificationToReceivers(client, discontent);
+  await recognize.SendNotificationToGiver(client, beerJarData);
+  await recognize.SendNotificationToReceivers(client, beerJarData);
 }
 
 
