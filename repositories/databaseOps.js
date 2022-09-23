@@ -14,6 +14,11 @@ module.exports = {
       sql: "CREATE TABLE IF NOT EXISTS profiles(name varchar(20) PRIMARY KEY, pings INT)",
       timeout: 30000, // 30s
     });
+    await pool.query({
+      sql: "CREATE TABLE IF NOT EXISTS beerjars(name varchar(20) PRIMARY KEY, beerjar INT, timestamp FLOAT)",
+      timeout: 30000, // 30s
+    });
+
   },
 
   setupPool: () => {

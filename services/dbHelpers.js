@@ -1,23 +1,38 @@
-var size
-var db = Array(size);
-for(var i = 0;i<size;i++){
-    db[i] = Array();
-}
-function isFloat(number){
-    return Number(number) && number%1==0;
-}
 
-function insert_into(table, query) {
-    var len = length(query);
-    if(len==3 && Number.isInteger(query[1]) && isFloat(query[2]));
-    var newlen = db.push(query);
-    if (newlen==len+1){
-        return true;
-    }
-    return false;
+const databaseOps = require("./databaseOps");
+
+function insert_into(query) {
+    const pool = databaseOps.getPool();
+    const con = await pool.getConnection();
+    await con.query({
+      sql: "INSERT INTO beerjars(name, jars, timestamp) VALUES(?, ?, ?)",
+      timeout: 30000, // 30s
+      values: [query.name,query.amount,query.timestamp],
+    });
+
+    const [rows] = await con.query({
+      sql: "SELECT pings FROM profiles WHERE name = ?",
+      timeout: 30000, // 30s
+      values: [user],
+    });
+
+    await con.release();
 }
+function query_amounts(name){
+    const pool = databaseOps.getPool();
+    const con = await pool.getConnection();
+    const count = await con.query({
+        sql: "SELECT SUM(jars) FROM beerjars WHERE name = ? ",
+        timeout: 30000, // 30s
+        values: [name],
+    });
+
+    await con.release();
+    return count;
+}   
   
   module.exports = {
-    insert_into
+    insert_into, 
+    query_amounts,
   };
   
