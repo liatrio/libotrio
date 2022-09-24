@@ -8,15 +8,15 @@ class SlackError extends Error {
   }
 }
 
-class BeerJarError extends Error {
-  constructor(BeerJarErrors, message) {
+class MessageCountError extends Error {
+  constructor(errorMessage, message) {
     super(message);
 
-    this.BeerJarErrors = BeerJarErrors;
+    this.errorMessage = errorMessage;
   }
 }
 
 module.exports = {
   SlackError,
-  BeerJarError,
+  MessageCountError,
 };

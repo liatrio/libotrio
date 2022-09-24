@@ -1,26 +1,21 @@
 const { ReactionMatches } = require("../middleware");
 const recognize = require("../services/recognizeServ");
-const { UserInfo } = require("../services/apiWrappers");
 const errorHandler = require("../services/errorHandler");
-const { SlackError, BeerJarError } = require("../services/error");
-
-//const beerEmojiRegex = new RegExp(":beerjar:", "g");
+const { SlackError, MessageCountError } = require("../services/error");
 
 module.exports = function (app) {
-  app.message(
-    ":cheers_to_the_beer_jar:", //   anyOf(directMention(), directMessage()),
-    Recognize
-  );
+  app.message(":cheers_to_the_beer_jar:", Recognize);
   app.event("reaction_added", ReactionMatches(":beerjar:"), Reaction);
 };
 
-async function Recognize({ message, client }) {
-  //Promise.all(ReceiverIdsIn(message.text).map(async (receiver)=>userInfo(client, receiver)))
+async function Recognize(client, message) {
   try {
-    var discontent = {
-      giver: await UserInfo(client, message.user),
+    let emojiCount = recognize.EmojiCountIn(message.text);
+    recognize.ValidateMessageCount(emojiCount);
+    var beerJarData = {
+      giver: message.user,
       receivers: recognize.ReceiverIdsIn(message.text),
-      count: recognize.EmojiCountIn(message.text),
+      count: emojiCount,
       message: message.text,
       channel: message.channel,
       timestamp: message.ts,
@@ -28,32 +23,28 @@ async function Recognize({ message, client }) {
   } catch (error) {
     if (error instanceof SlackError) {
       return errorHandler.HandleSlackError(client, message, error);
-    } else if (error instanceof BeerJarError) {
-      return errorHandler.HandlesBeerJarError(client, message, error);
+    } else if (error instanceof MessageCountError) {
+      return errorHandler.HandlesMessageCountError(client, message, error);
     } else {
       return errorHandler.HandleGenericError(client, message, error);
     }
   }
-  await recognize.SendNotificationToGiver(client, discontent);
-
-  await recognize.SendNotificationToReceivers(client, discontent);
+  await recognize.SendNotificationToGiver(client, beerJarData);
+  await recognize.SendNotificationToReceivers(client, beerJarData);
 
   await client.reactions.add({
-    channel: discontent.channel,
+    channel: message.channel,
     name: "beerjar",
-    timestamp: discontent.timestamp,
+    timestamp: beerJarData.timestamp,
   });
 }
 
-async function Reaction({ event, client }) {
+async function Reaction(client, event) {
+  var originalMessage = await recognize.GetMessageReacted(client, event);
   try {
-    var originalMessage = await GetMessageReacted(client, event);
-
-    if (!originalMessage.text.includes(":cheers_to_the_beer_jar:")) {
-      return;
-    }
-    var discontent = {
-      giver: await UserInfo(client, event.user),
+    recognize.ValidateMessageCount(1);
+    var beerJarData = {
+      giver: event.user,
       receivers: recognize.ReceiverIdsIn(originalMessage.text),
       count: 1,
       message: originalMessage.text,
@@ -63,24 +54,17 @@ async function Reaction({ event, client }) {
   } catch (error) {
     if (error instanceof SlackError) {
       return errorHandler.HandleSlackError(client, event, error);
-    } else if (error instanceof BeerJarError) {
-      return errorHandler.HandleBeerJarError(client, event, error);
+    } else if (error instanceof MessageCountError) {
+      return errorHandler.MessageCountError(client, event, error);
     } else {
       return errorHandler.HandleGenericError(client, event, error);
     }
   }
-  await recognize.SendNotificationToGiver(client, discontent);
-
-  await recognize.SendNotificationToReceivers(client, discontent);
+  await recognize.SendNotificationToGiver(client, beerJarData);
+  await recognize.SendNotificationToReceivers(client, beerJarData);
 }
 
-async function GetMessageReacted(client, message) {
-  const response = await client.conversations.replies({
-    channel: message.item.channel,
-    ts: message.item.ts,
-    limit: 1,
-  });
-  if (response.ok) {
-    return response.messages[0];
-  }
-}
+module.exports = {
+  Reaction,
+  Recognize,
+};

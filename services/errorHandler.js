@@ -6,13 +6,11 @@ async function HandleSlackError(client, message, error) {
   });
 }
 
-async function HandleBeerJarError(client, message, error) {
-  const errorString = error.BeerJarErrors.join(`\n`);
-  const errorMessage = `Sending :cheers_to_the_beer_jar: failed with the following error(s):\n${errorString}`;
+async function HandleMessageCountError(client, message, error) {
   return client.chat.postEphemeral({
     channel: message.channel,
     user: message.user,
-    text: errorMessage,
+    text: error.errorMessage,
   });
 }
 
@@ -27,6 +25,6 @@ async function HandleGenericError(client, message, error) {
 
 module.exports = {
   HandleSlackError,
-  HandleBeerJarError,
+  HandleMessageCountError,
   HandleGenericError,
 };
